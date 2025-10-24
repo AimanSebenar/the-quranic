@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"> <!--for accessibility and search engines-->
+<head>
+    <meta charset="UTF-8"> <!--character encoding so can render correctly-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--layout scale to device-->
+    <title>Quran Reader with AI Search</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>The Quranic</h1>
+            <p class="subtitle">Search the Holy Quran for deeper insights!</p>
+        </header>
+
+        <!-- Model Loading (shown only on first load) -->
+        <div class="model-loading" id="modelLoading" style="display: none;">
+            <div class="loading-content">
+                <h3>Loading AI Model</h3>
+                <p id="loadingStatus">Initializing...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="loading-note">The model will be cached for future visits.</p>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search for verses (keyword or description)">
+                <button onclick="searchVerses()" id="searchBtn">Search</button>
+            </div>
+            <div class="search-mode">
+                <label>
+                    <input type="radio" name="searchMode" value="keyword" checked>
+                    Keyword Search
+                </label>
+                <label>
+                    <input type="radio" name="searchMode" value="semantic" id="semanticRadio">
+                    Semantic Search
+                    <span class="ai-badge">AI</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="content" id="content">
+            <div class="loading">Loading Quran data</div>
+        </div>
+    </div>
+
+    <!-- Load Transformers.js -->
+    <script type="module" src="script.js"></script> <!--"module" allows import/export-->
+</body>
+</html>

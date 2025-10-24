@@ -279,16 +279,6 @@ button:disabled {
     margin: 20px 0;
 }
 
-.info {
-    text-align: center;
-    padding: 20px;
-    color: #2c5282;
-    background: #bee3f8;
-    border-radius: 8px;
-    margin: 20px 0;
-    font-size: 0.95em;
-}
-
 .surah-header {
     text-align: center;
     padding: 20px;

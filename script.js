@@ -1,5 +1,5 @@
 // Import Transformers.js
-import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2'; //only takes pipiline and env from the cdn
 
 // Configure Transformers.js to use local models
 env.allowLocalModels = false;
@@ -19,14 +19,14 @@ async function init() {
     await initializeModel();
 }
 
-// Load Quran data with pre-computed embeddings
+// Load Quran data with embeddings
 async function loadQuranData() {
     try {
         const response = await fetch('quran_with_embeddings.json');
         quranData = await response.json();
         
         // Flatten all verses for quick access
-        allVersesWithEmbeddings = [];
+        allVersesWithEmbeddings = []; // Nested loop
         quranData.surahs.forEach((surah, surahIndex) => {
             surah.verses.forEach(verse => {
                 allVersesWithEmbeddings.push({
@@ -52,7 +52,7 @@ async function loadQuranData() {
 async function initializeModel() {
     if (modelLoaded) return;
     
-    console.log('Initializing local AI model...');
+    console.log('Initializing AI model');
     const modelLoading = document.getElementById('modelLoading');
     const loadingStatus = document.getElementById('loadingStatus');
     const progressFill = document.getElementById('progressFill');
@@ -86,7 +86,7 @@ async function initializeModel() {
         loadingStatus.textContent = '✓ Model loaded! AI search is ready.';
         
         modelLoaded = true;
-        console.log('✓ Local AI model loaded successfully!');
+        console.log('✓ AI model loaded successfully!');
         
         // Hide loading UI after a moment
         setTimeout(() => {
@@ -95,7 +95,7 @@ async function initializeModel() {
         
     } catch (error) {
         console.error('Error loading model:', error);
-        loadingStatus.textContent = '✗ Failed to load model. AI search will not be available.';
+        loadingStatus.textContent = '✗ Failed to load model. Semantic search will not be available.';
         document.getElementById('semanticRadio').disabled = true;
     }
 }
@@ -149,13 +149,13 @@ function cosineSimilarity(a, b) {
 // Semantic search using pre-computed embeddings (FAST!)
 async function semanticSearch(query, topK = 20) {
     const content = document.getElementById('content');
-    content.innerHTML = '<div class="loading">🤖 AI is analyzing your query locally...</div>';
+    content.innerHTML = '<div class="loading">AI is analyzing your query</div>';
 
     try {
         // Get embedding for the query
         const queryEmbedding = await getQueryEmbedding(query);
 
-        content.innerHTML = '<div class="loading">⚡ Searching through all verses instantly...</div>';
+        content.innerHTML = '<div class="loading">Searching through all verses</div>';
 
         // Calculate similarity with all verses (instant because embeddings are pre-computed!)
         const similarities = allVersesWithEmbeddings
@@ -215,7 +215,7 @@ function loadSurah(surahIndex) {
             <div class="surah-title">${surah.name} - ${surah.transliteration}</div>
             <div class="surah-meta">
                 ${surah.translation} • 
-                ${surah.type} • 
+                ${surah.type.charAt(0).toUpperCase() + surah.type.slice(1)} • 
                 ${surah.total_verses} verses
             </div>
         </div>
@@ -280,7 +280,7 @@ async function keywordSearchAndDisplay(searchTerm) {
         content.innerHTML = `
             <div class="error">
                 <h3>No results found</h3>
-                <p>Try AI Semantic Search for better results or different keywords</p>
+                <p>Try Semantic Search for better results or different keywords</p>
                 <button onclick="displaySurahList()" style="margin-top: 15px">Back to Surahs</button>
             </div>
         `;
@@ -316,11 +316,8 @@ function displaySemanticResults(results, searchTerm) {
     let html = `
         <button class="back-btn" onclick="displaySurahList()">← Back to Surahs</button>
         <div class="surah-header">
-            <div class="surah-title">AI Semantic Search Results <span class="ai-badge"></span></div>
+            <div class="surah-title">Semantic Search Results <span class="ai-badge"></span></div>
             <div class="surah-meta">Found ${results.length} verses related to "${searchTerm}"</div>
-        </div>
-        <div class="info">
-            🔒 Fully private local AI search • No data sent to any server • Works offline
         </div>
     `;
     
